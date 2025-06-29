@@ -5,73 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion Admin</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f4f4f4;
-      padding: 10px;
-    }
-
-    .login-box {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .login-box h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    form {
-      padding: 20px;
-      border-radius: 5px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #35424a;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background: #222;
-    }
-
-    .error {
-      color: rgba(0, 0, 0, 0.7);
-      padding: 10px;
-      text-align: center;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
   <div class="login-box">
@@ -83,29 +17,9 @@
     </form>
   </div>
 
-  <script>
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const password = document.getElementById('password').value;
+  <script src="./js/login.js">
 
-      // https://mjp-backend.onrender.com/api/auth/login
-
-      const res = await fetch('https://mjp-backend.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-      });
-
-      const data = await res.json();
-
-      if (data.status === true && data.token) {
-        localStorage.setItem('adminToken', data.token);
-        window.location.href = '/dashboard.html';
-      } else {
-        console.log(data.error);
-        document.getElementById('error-msg').textContent = data.error || data.message;
-      }
-    });
   </script>
+
 </body>
 </html>
