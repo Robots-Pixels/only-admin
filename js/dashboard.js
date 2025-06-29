@@ -3,9 +3,6 @@
 const API_URL = "https://mjp-backend-nzf2.onrender.com/api";
 const token = localStorage.getItem("adminToken");
 
-fetch(`https://mjp-backend-nzf2.onrender.com/api/contacts/test`, {headers})
-
-
 if (!token) {
   alert("Non autorisé. Veuillez vous reconnecter.");
   location.href = "/index.html";
@@ -15,6 +12,10 @@ const headers = {
   "Content-Type": "application/json",
   "Authorization": `Bearer ${token}`
 };
+
+
+fetch(`https://mjp-backend-nzf2.onrender.com/api/contacts/test`, {headers})
+
 
 let contacts = [], convertis = [], arrivants = [];
 
