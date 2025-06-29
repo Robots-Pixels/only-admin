@@ -3,6 +3,9 @@
 const API_URL = "https://mjp-backend-nzf2.onrender.com/api";
 const token = localStorage.getItem("adminToken");
 
+fetch(`https://mjp-backend-nzf2.onrender.com/api/contacts/test`, {headers})
+
+
 if (!token) {
   alert("Non autorisé. Veuillez vous reconnecter.");
   location.href = "/index.html";
@@ -52,7 +55,9 @@ document.getElementById('nav-statistics').onclick = () => showPage('statistics')
 
 
 function fetchContacts() {
-  fetch(`${API_URL}/contacts`, {headers})
+  fetch(`${API_URL}/contacts`,
+    
+    {headers})
     .then(res => res.json())
     .then(data => {
       if (Array.isArray(data)) {
