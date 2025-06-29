@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Inscrivez-vous</title>
+    <style>
+        :root {
+            --primary-color: #35424a;
+            --accent-color: #e8491d;
+            --success-color: #28a745;
+            --delete-color: #e61111;
+            --info-color: #007bff;
+            --text-light: #fff;
+            --text-dark: #333;
+            --bg-light: #f4f4f4;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-size: 16px;
+        }
+
+        form{
+          display: flex;
+          justify-content: center;
+        }
+
+        .input-password{
+              padding: 8px;
+              border-radius: 5px;
+          }
+
+        .form-wraper{
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        body{
+          position: relative;
+          height: 100vh;
+        }
+
+        .wraper{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: absolute;
+          max-width: 400px;
+          top: 50%;
+          left: 50%;
+          -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+        }
+
+        button{
+          cursor: pointer;
+        }
+
+        .submit-button{
+          padding: 8px;
+          border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+  <div class="wraper">
+
+    <h1 style="text-align: center; margin-bottom: 30px; font-size: 1.5rem;">
+      Entrez un mot de passe admin. Ce sera le mot de passe <span style="color: #e61111;">unique</span> que vous utiliserez à chaque fois pour voir les contacts.
+    </h1>
+  
+    <form onsubmit="submitForm(event)">
+  
+      <div class="form-wraper">
+  
+        <input type="password" class="input-password" placeholder="Mot de passe unique">
+        <button type="button" class="eye-button" style="width: 20px; background: none; border: none;"
+        onclick="toggleEyeDisplay()">
+          <img style="width: 100%;" src="./assets/hidden.png">
+        </button>
+
+        <button type="submit" class="submit-button">
+          Confirmer
+        </button>
+  
+      </div>
+  
+    </form>
+
+  </div>
+
+
+  <script>
+    const inputPassword = document.querySelector(".input-password");
+    const eyeButtonImg = document.querySelector(".eye-button img");
+
+    eyeSrc = ["./assets/hidden.png", "./assets/open.png"]
+    let currentEyeSrcIndex = 0;
+
+    const toggleEyeDisplay = () => {
+      currentEyeSrcIndex = currentEyeSrcIndex === 0 ? 1 : 0;
+      inputPassword.type = currentEyeSrcIndex === 0 ? "password" : "text";
+      eyeButtonImg.src = eyeSrc[currentEyeSrcIndex];
+    }
+
+    const submitForm = async (e) => {
+      e.preventDefault();
+      const password = inputPassword.value;
+
+      let res = await fetch('https://church-backend-nzf2.onrender.com/api/auth/adminSignUp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({password: password})
+      });
+
+      res = await res.json();
+
+      if (res.status === false){
+        alert(res.message);
+        return;
+      }
+
+      alert(res.message);
+      window.location = "https://www.google.com/";
+    }
+
+  </script>
+</body>
+</html>

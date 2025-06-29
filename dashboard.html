@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Contacts</title>
+    <style>
+        :root {
+            --primary-color: #35424a;
+            --accent-color: #e8491d;
+            --success-color: #e8491dd7;
+            --delete-color: #e61111;
+            --info-color: #e8491d80;
+            --text-light: #fff;
+            --text-dark: #333;
+            --bg-light: #f4f4f4;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-size: 16px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: var(--text-light);
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .header-image {
+            width: 100%;
+            max-width: 360px; 
+            aspect-ratio: 3 / 1; 
+            background-image: url("./assets/logo.jpeg");
+            background-position: center;
+            background-size: 60%;
+            background-repeat: no-repeat;
+            margin-left: 1%;
+        }
+
+
+        nav {
+            background: var(--text-dark);
+            padding: 0;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 15px;
+            display: block;
+            flex-grow: 1;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background: var(--accent-color);
+        }
+
+        h2, h3 {
+            margin: 10px 0;
+            color: var(--primary-color);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px rgba(232, 73, 29, 0.3);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--text-light);
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--text-dark);
+        }
+
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .list {
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table, th, td {
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .action-btn {
+    background: var(--info-color);
+    color: var(--text-light);
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 140px;
+    text-align: center;
+}
+
+.action-btn.add {
+    background: var(--success-color);
+}
+.action-btn.arrivant {
+    background: var(--info-color);
+}
+.action-btn.save {
+    background: var(--info-color);
+}
+.action-btn.delete {
+    background: var(--delete-color);
+}
+
+.action-btn:hover {
+    opacity: 0.85;
+}
+
+        .hidden {
+            display: none;
+        }
+
+        .action-group {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
+          justify-content: center;
+          align-items: center;
+          max-width: 180px;
+          margin: 0 auto;
+      }
+
+      td:last-child {
+      text-align: center;
+    }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .btn {
+                width: auto;
+            }
+
+            .list-container {
+                flex-direction: row;
+            }
+
+            .list {
+                flex: 1;
+            }
+
+            .action-btn {
+                width: auto;
+            }
+
+            /* .header-image {
+                margin-left: 0%;
+                margin: 0px auto;
+            } */
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            nav a:last-child {
+                border-bottom: none;
+            }
+
+            .list-container {
+                gap: 15px;
+            }
+
+            /* Responsive tables for mobile */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                border: 1px solid var(--border-color);
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            td:last-child {
+                border-bottom: none;
+            }
+
+            td:before {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+                text-align: left;
+            }
+
+            /* Labels for mobile view */
+            #all-contacts tbody td:nth-of-type(1):before { content: "Nom:"; }
+            #all-contacts tbody td:nth-of-type(2):before { content: "Prénom:"; }
+            #all-contacts tbody td:nth-of-type(3):before { content: "Téléphone:"; }
+            #all-contacts tbody td:nth-of-type(4):before { content: "Actions:"; }
+
+            #selected-contacts tbody td:nth-of-type(1):before { content: "Nom:"; }
+            #selected-contacts tbody td:nth-of-type(2):before { content: "Prénom:"; }
+            #selected-contacts tbody td:nth-of-type(3):before { content: "Téléphone:"; }
+
+            #repertoire-contacts tbody td:nth-of-type(1):before { content: "Nom:"; }
+            #repertoire-contacts tbody td:nth-of-type(2):before { content: "Prénom:"; }
+            #repertoire-contacts tbody td:nth-of-type(3):before { content: "Téléphone:"; }
+            #repertoire-contacts tbody td:nth-of-type(4):before { content: "Actions:"; }
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 15px 10px;
+            }
+
+            td {
+                padding-left: 45%;
+                font-size: 14px;
+            }
+
+            td:before {
+                width: 40%;
+                font-size: 14px;
+            }
+
+            .header-image {
+                margin-left: 0%;
+                margin: 0px auto;
+            }
+
+        }
+
+
+    </style>
+</head>
+<body>
+  <header>
+    <div class="header-image"></div>
+  </header>
+  <nav>
+    <a href="#" id="nav-contacts">Tous les Contacts</a>
+    <a href="#" id="nav-convertis">Nouveaux Convertis</a>
+    <a href="#" id="nav-arrivants">Nouveaux Arrivants</a>
+    <a href="#" id="nav-repertoire">Répertoire</a>
+  </nav>
+  
+
+  <div class="container">
+
+    <div id="contacts-page" class="hidden">
+      <div class="form-container">
+        <h2>Tous les Contacts</h2>
+        <table id="all-contacts">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Sexe</th>
+              <th>Quartier</th>
+              <th>Profession</th>
+              <th>Téléphone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="convertis-page" class="hidden">
+      <div class="form-container">
+        <h2>Nouveaux Convertis</h2>
+        <table id="selected-contacts">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Sexe</th>
+              <th>Quartier</th>
+              <th>Profession</th>
+              <th>Téléphone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    
+    <div id="arrivants-page" class="hidden">
+      <div class="form-container">
+        <h2>Nouveaux Arrivants</h2>
+        <table id="newcomers-contacts">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Sexe</th>
+              <th>Quartier</th>
+              <th>Profession</th>
+              <th>Téléphone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    
+    
+    <div id="repertoire-page" class="hidden">
+      <div class="form-container">
+        <h2>Répertoire</h2>
+        <table id="repertoire-contacts">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Sexe</th>
+              <th>Quartier</th>
+              <th>Profession</th>
+              <th>Téléphone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+// const API_URL = "http://localhost:3000/api";
+
+const API_URL = "https://mjp-backend-nzf2.onrender.com/api";
+const token = localStorage.getItem("adminToken");
+
+if (!token) {
+  alert("Non autorisé. Veuillez vous reconnecter.");
+  location.href = "/index.html";
+}
+
+const headers = {
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${token}`
+};
+
+let contacts = [], convertis = [], arrivants = [];
+
+const elements = {
+  allContactsTable: document.querySelector('#all-contacts tbody'),
+  convertisTable: document.querySelector('#selected-contacts tbody'),
+  arrivantsTable: document.querySelector('#newcomers-contacts tbody'),
+  repertoireTable: document.querySelector('#repertoire-contacts tbody'),
+};
+
+const pages = {
+  contacts: document.getElementById('contacts-page'),
+  convertis: document.getElementById('convertis-page'),
+  arrivants: document.getElementById('arrivants-page'),
+  repertoire: document.getElementById('repertoire-page'),
+};
+
+function showPage(pageId) {
+  Object.values(pages).forEach(p => p.classList.add('hidden'));
+  pages[pageId].classList.remove('hidden');
+
+  switch (pageId) {
+    case 'contacts': return displayAllContacts();
+    case 'convertis': return fetchConvertis();
+    case 'arrivants': return fetchArrivants();
+    case 'repertoire': return displayRepertoire();
+  }
+}
+
+document.getElementById('nav-contacts').onclick = () => showPage('contacts');
+document.getElementById('nav-convertis').onclick = () => showPage('convertis');
+document.getElementById('nav-arrivants').onclick = () => showPage('arrivants');
+document.getElementById('nav-repertoire').onclick = () => showPage('repertoire');
+
+function fetchContacts() {
+  fetch(`${API_URL}/contacts`)
+    .then(res => res.json())
+    .then(data => {
+      if (Array.isArray(data)) {
+        contacts = data.map(c => ({
+          nom: c.nom, prenom: c.prenom, telephone: c.telephone,
+          profession: c.profession || "", quartier: c.quartier || "", sexe: c.sexe || ""
+        }));
+        displayAllContacts();
+      }
+    });
+}
+
+function fetchConvertis() {
+  fetch(`${API_URL}/contacts/convertis`, { headers })
+    .then(res => res.json())
+    .then(data => convertis = data)
+    .then(displayConvertis)
+    .catch(err => console.error("Erreur chargement convertis:", err));
+}
+
+function fetchArrivants() {
+  fetch(`${API_URL}/contacts/arrivants`, { headers })
+    .then(res => res.json())
+    .then(data => arrivants = data)
+    .then(displayArrivants)
+    .catch(err => console.error("Erreur chargement arrivants:", err));
+}
+
+function createRow(contact, actions = '') {
+  return `
+    <td>${contact.nom}</td>
+    <td>${contact.prenom}</td>
+    <td>${contact.sexe}</td>
+    <td>${contact.quartier}</td>
+    <td>${contact.profession}</td>
+    <td>${contact.telephone}</td>
+    <td><div class="action-group">${actions}</div></td>`;
+}
+
+function displayAllContacts() {
+  elements.allContactsTable.innerHTML = '';
+  contacts.forEach((c, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = createRow(c, `
+      <button class="action-btn add" onclick="addToList('convertis', ${i})">+ Converti</button>
+      <button class="action-btn arrivant" onclick="addToList('arrivants', ${i})">+ Arrivant</button>
+      <button class="action-btn delete" onclick="deleteContact(${i})">Supprimer</button>
+    `);
+    elements.allContactsTable.appendChild(row);
+  });
+}
+
+function displayConvertis() {
+  elements.convertisTable.innerHTML = '';
+  convertis.forEach((c, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = createRow(c, `
+      <button class="action-btn delete" onclick="removeFromList('convertis', ${i})">Retirer</button>
+    `);
+    elements.convertisTable.appendChild(row);
+  });
+}
+
+function displayArrivants() {
+  elements.arrivantsTable.innerHTML = '';
+  arrivants.forEach((c, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = createRow(c, `
+      <button class="action-btn delete" onclick="removeFromList('arrivants', ${i})">Retirer</button>
+    `);
+    elements.arrivantsTable.appendChild(row);
+  });
+}
+
+function displayRepertoire() {
+  elements.repertoireTable.innerHTML = '';
+  contacts.forEach((c, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = createRow(c, `
+      <button class="action-btn save" onclick="exportVCard(${i})">📁 Exporter</button>
+    `);
+    elements.repertoireTable.appendChild(row);
+  });
+}
+
+window.addToList = (listName, i) => {
+  const contact = contacts[i];
+  const endpoint = listName === 'convertis' ? 'convertis/add' : 'arrivants/add';
+
+  fetch(`${API_URL}/contacts/${endpoint}`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(contact)
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Échec de l'ajout");
+    alert("Ajouté avec succès.");
+    listName === "convertis" ? fetchConvertis() : fetchArrivants();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Erreur d’ajout.");
+  });
+};
+
+window.removeFromList = (listName, i) => {
+  const list = listName === 'convertis' ? convertis : arrivants;
+  const contact = list[i];
+  const endpoint = listName;
+
+  fetch(`${API_URL}/contacts/${endpoint}`, {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ telephone: contact.telephone })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Échec suppression");
+    alert("Retiré avec succès.");
+    listName === "convertis" ? fetchConvertis() : fetchArrivants();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Erreur de suppression.");
+  });
+};
+
+window.deleteContact = (i) => {
+  const c = contacts[i];
+  if (!confirm(`Supprimer ${c.prenom} ${c.nom} ?`)) return;
+
+  fetch(`${API_URL}/contacts/delete`, {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ telephone: c.telephone })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Erreur serveur");
+    contacts.splice(i, 1);
+    displayAllContacts();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Erreur de suppression.");
+  });
+};
+
+window.exportVCard = (i) => {
+  const c = contacts[i];
+  const vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${c.prenom} ${c.nom}\nTEL:${c.telephone}\nADR:${c.quartier}\nNOTE:Sexe: ${c.sexe}\nEND:VCARD`;
+  const blob = new Blob([vCard], { type: 'text/vcard' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${c.prenom}_${c.nom}.vcf`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+// Initialisation
+fetchContacts();
+showPage('contacts');
+  </script>
+  
+</body>
+</html>

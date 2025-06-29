@@ -1,142 +1,111 @@
+<!-- admin-login.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Admin - Inscrivez-vous</title>
-    <style>
-        :root {
-            --primary-color: #35424a;
-            --accent-color: #e8491d;
-            --success-color: #28a745;
-            --delete-color: #e61111;
-            --info-color: #007bff;
-            --text-light: #fff;
-            --text-dark: #333;
-            --bg-light: #f4f4f4;
-            --border-color: #ddd;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Admin</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+      padding: 10px;
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            font-size: 16px;
-        }
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
 
-        form{
-          display: flex;
-          justify-content: center;
-        }
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-        .input-password{
-              padding: 8px;
-              border-radius: 5px;
-          }
+    form {
+      padding: 20px;
+      border-radius: 5px;
+    }
 
-        .form-wraper{
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
 
-        body{
-          position: relative;
-          height: 100vh;
-        }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #35424a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-        .wraper{
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: absolute;
-          max-width: 400px;
-          top: 50%;
-          left: 50%;
-          -ms-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-        }
+    button:hover {
+      background: #222;
+    }
 
-        button{
-          cursor: pointer;
-        }
-
-        .submit-button{
-          padding: 8px;
-          border-radius: 5px;
-        }
-
-    </style>
+    .error {
+      color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-
-  <div class="wraper">
-
-    <h1 style="text-align: center; margin-bottom: 30px; font-size: 1.5rem;">
-      Entrez un mot de passe admin. Ce sera le mot de passe <span style="color: #e61111;">unique</span> que vous utiliserez à chaque fois pour voir les contacts.
-    </h1>
-  
-    <form onsubmit="submitForm(event)">
-  
-      <div class="form-wraper">
-  
-        <input type="password" class="input-password" placeholder="Mot de passe unique">
-        <button type="button" class="eye-button" style="width: 20px; background: none; border: none;"
-        onclick="toggleEyeDisplay()">
-          <img style="width: 100%;" src="./assets/hidden.png">
-        </button>
-
-        <button type="submit" class="submit-button">
-          Confirmer
-        </button>
-  
-      </div>
-  
+  <div class="login-box">
+    <h2>Connexion Admin</h2>
+    <form id="login-form">
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <div class="error" id="error-msg"></div>
+        <button type="submit">Se connecter</button>
     </form>
-
   </div>
 
-
   <script>
-    const inputPassword = document.querySelector(".input-password");
-    const eyeButtonImg = document.querySelector(".eye-button img");
-
-    eyeSrc = ["./assets/hidden.png", "./assets/open.png"]
-    let currentEyeSrcIndex = 0;
-
-    const toggleEyeDisplay = () => {
-      currentEyeSrcIndex = currentEyeSrcIndex === 0 ? 1 : 0;
-      inputPassword.type = currentEyeSrcIndex === 0 ? "password" : "text";
-      eyeButtonImg.src = eyeSrc[currentEyeSrcIndex];
-    }
-
-    const submitForm = async (e) => {
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const password = inputPassword.value;
+      const password = document.getElementById('password').value;
 
-      let res = await fetch('https://church-backend-nzf2.onrender.com/api/auth/adminSignUp', {
+      // https://mjp-backend.onrender.com/api/auth/login
+
+      const res = await fetch('https://mjp-backend.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({password: password})
+        body: JSON.stringify({ password })
       });
 
-      res = await res.json();
+      const data = await res.json();
 
-      if (res.status === false){
-        alert(res.message);
-        return;
+      if (data.status === true && data.token) {
+        localStorage.setItem('adminToken', data.token);
+        window.location.href = '/dashboard.html';
+      } else {
+        console.log(data.error);
+        document.getElementById('error-msg').textContent = data.error || data.message;
       }
-
-      alert(res.message);
-      window.location = "https://www.google.com/";
-    }
-
+    });
   </script>
 </body>
 </html>
