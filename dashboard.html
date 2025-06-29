@@ -467,12 +467,8 @@ if (!token) {
 }
 
 const headers = {
-  "Content-Type": "application/json",
-  "Authorization": `Bearer ${token}`
+  "Content-Type": "application/json"
 };
-
-
-fetch(`https://mjp-backend-nzf2.onrender.com/api/contacts/test`, {headers})
 
 let contacts = [], convertis = [], arrivants = [];
 
@@ -513,10 +509,8 @@ document.getElementById('nav-statistics').onclick = () => showPage('statistics')
 
 
 function fetchContacts() {
-  fetch(`${API_URL}/contacts`,
-    
-    {headers})
-    .then(res => res.json())
+  fetch(`${API_URL}/contacts?token=${token}`)
+  .then(res => res.json())
     .then(data => {
       if (Array.isArray(data)) {
         contacts = data.map(c => ({
