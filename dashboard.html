@@ -467,7 +467,8 @@ if (!token) {
 }
 
 const headers = {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${token}`
 };
 
 let contacts = [], convertis = [], arrivants = [];
@@ -484,7 +485,7 @@ const pages = {
   convertis: document.getElementById('convertis-page'),
   arrivants: document.getElementById('arrivants-page'),
   repertoire: document.getElementById('repertoire-page'),
-  statistics: document.getElementById('statistics-page') 
+  statistics: document.getElementById('statistics-page') // 👈 ici
 };
 
 function showPage(pageId) {
@@ -509,8 +510,8 @@ document.getElementById('nav-statistics').onclick = () => showPage('statistics')
 
 
 function fetchContacts() {
-  fetch(`${API_URL}/contacts?token=${token}`)
-  .then(res => res.json())
+  fetch(`${API_URL}/contacts`, {headers})
+    .then(res => res.json())
     .then(data => {
       if (Array.isArray(data)) {
         contacts = data.map(c => ({
@@ -714,6 +715,7 @@ function displayStatistics() {
 // Initialisation
 fetchContacts();
 showPage('contacts');
+
 
 
   </script>
